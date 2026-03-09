@@ -7,6 +7,7 @@ if len(sys.argv) == 3:
     warehouse = int(sys.argv[1])
     date = sys.argv[2]
 
+# fill missing dates
 def fill_date(df):
     df['Day'] = pd.to_datetime(df['Day'], errors='coerce')  # Преобразуем в datetime
     full_range = pd.date_range(start=df['Day'].min(), end=df['Day'].max(), freq='D')
