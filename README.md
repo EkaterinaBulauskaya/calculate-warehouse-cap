@@ -5,7 +5,7 @@
 - текущих остатков,
 - запланированных поставок (PO).
 
-Результат сохраняется в файл `warehouse_availiable_space.csv`.
+Результат сохраняется в файл `1_out_warehouse_availiable_space.csv`.
 
 ## Установка зависимостей
 
@@ -16,13 +16,13 @@ python -m pip install pandas scikit-learn
 ## Формат входных файлов
 
 В рабочей директории должны быть 3 CSV-файла:
-- `sales_by_<date>.csv` — история продаж по SKU.
-- `inventory_level_on_<date>.csv` — стартовые остатки по SKU на дату расчета.
-- `supplied_products_by_<date>.csv` — планируемые поставки (PO).
+- `1_in_sales_by_<date>.csv` — история продаж по SKU.
+- `1_in_inventory_level_on_<date>.csv` — стартовые остатки по SKU на дату расчета.
+- `1_in_supplied_products_by_<date>.csv` — планируемые поставки (PO).
 
 `<date>` в имени файлов должен быть в формате `YYYY-MM-DD` (например, `2025-12-31`).
 
-### 1) `sales_by_<date>.csv`
+### 1) `1_in_sales_by_<date>.csv`
 
 Обязательные колонки:
 - `Day` — дата продажи в формате `MM/DD/YYYY` (пример: `12/31/2025`).
@@ -34,7 +34,7 @@ python -m pip install pandas scikit-learn
 Day,Product variant SKU at time of sale,Net items sold
 ```
 
-### 2) `inventory_level_on_<date>.csv`
+### 2) `1_in_inventory_level_on_<date>.csv`
 
 Обязательные колонки:
 - `SKU` — идентификатор SKU.
@@ -47,7 +47,7 @@ Day,Product variant SKU at time of sale,Net items sold
 ,SKU,12/31/2025
 ```
 
-### 3) `supplied_products_by_<date>.csv`
+### 3) `1_in_supplied_products_by_<date>.csv`
 
 Обязательные колонки:
 - `Day` — дата поставки в формате `MM/DD/YYYY` (пример: `02/03/2026`).
@@ -64,7 +64,7 @@ Day,Product variant SKU at time of sale,Net items sold
 ## Запуск
 
 ```bash
-python calculate_warehouse_available_cap.py <warehouse_capacity> <date_arg> <forecast_days_amount>
+python _1_calculate_warehouse_available_cap.py <warehouse_capacity> <date_arg> <forecast_days_amount>
 ```
 со следующими параметрами
 - `warehouse_capacity` - общее количество места на складе
@@ -74,7 +74,7 @@ python calculate_warehouse_available_cap.py <warehouse_capacity> <date_arg> <for
 Пример:
 
 ```bash
-python calculate_warehouse_available_cap.py 100000 2025-31-12 1096
+python _1_calculate_warehouse_available_cap.py 100000 2025-31-12 1096
 ```
 
 `<date_arg>` ожидается в формате `YYYY-DD-MM`, например `2025-31-12`, и внутри скрипта преобразуется в `12/31/2025`.
@@ -82,6 +82,6 @@ python calculate_warehouse_available_cap.py 100000 2025-31-12 1096
 ## Выходной файл
 
 После запуска создается:
-- `warehouse_availiable_space.csv`
+- `1_out_warehouse_availiable_space.csv`
 
 Также таблица печатается в консоль.
