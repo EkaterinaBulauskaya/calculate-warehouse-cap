@@ -13,8 +13,8 @@ def repair_product(product, sells_col = 'Sold'):
     mask_known = product['Status'] == 1
     mask_missing = product['Status'] == 0
     model = LinearRegression()
-    model.fit(product.loc[mask_known, ['Date_ordinal']], product[product][sells_col])
-    repair_ordinals  = product[mask_missing, 'Date_ordinal']
+    model.fit(product.loc[mask_known, ['Date_ordinal']], product.loc[mask_known, sells_col])
+    repair_ordinals  = product.loc[mask_missing, 'Date_ordinal']
     predicted_sales = model.predict(pd.DataFrame({'Date_ordinal': repair_ordinals }))
     new_product['Sold'] = new_product['Sold'].astype('float32')
     new_product.loc[new_product['Status'] == 0, 'Sold'] = [round(float(x), 2) if float(x) >= 0 else 0 for x in predicted_sales]
