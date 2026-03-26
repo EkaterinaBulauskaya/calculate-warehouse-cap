@@ -1,4 +1,4 @@
-# calculate-warehouse-cap
+# Example of warehouse optimization
 
 Репозиторий с двумя независимыми Python-проектами (данные и скрипты лежат в своих папках).
 
@@ -19,7 +19,7 @@ python -m pip install pandas scikit-learn
 
 ```text
 projects/
-  warehouse_cap/   # README, скрипт, notebook, in_*.csv, out_*.csv
+  warehouse_cap/     # README, скрипт, notebook, in_*.csv, out_*.csv
   abc_xyz/           # README, скрипт, notebook, in_*.csv, out_*.csv
 ```
 
