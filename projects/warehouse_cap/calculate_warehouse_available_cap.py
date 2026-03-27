@@ -86,9 +86,20 @@ def calculate_stocks(predictions, dates, sku_list, inventory_filename):
     return stocks
 
 
+def normalize_dates(dates_list):
+    normalized_dates = []
+    for date in dates_list:
+        if type(date) == str and date[2] == '/' and date[5] == '/':
+            normalized_dates.append(date)
+        else:
+            normalized_dates.append(str(date)[5:10].replace('-', '/') + '/' + str(date)[:4])
+    return normalized_dates
+
+
 def include_purchase_orders(stocks_df, po_filename, dates, sku_list):
     '''Добавляет поставки PO к остаткам, начиная с даты поступления.'''
     purchase_orders = pd.read_csv(po_filename)
+    purchase_orders['Day'] = normalize_dates(purchase_orders['Day'])
     for i in range(len(purchase_orders)):
         po_day = purchase_orders['Day'].iloc[i]
         po_sku = purchase_orders['SKU'].iloc[i]
