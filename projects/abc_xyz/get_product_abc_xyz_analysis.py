@@ -26,7 +26,9 @@ def prepare_products(filename):
     data = pd.read_csv(filename)
     # Удаляем служебные колонки индекса, если CSV был сохранен с index=True
     data = data.loc[:, ~data.columns.str.startswith('Unnamed')]
-    data['Day'] = pd.to_datetime(data['Day'])
+    data['Day'] = pd.to_datetime(data['Day'], errors='coerce')
+    if data['Day'].isna().any():
+        raise ValueError('Invalid or missing Day')
 
     sku_list = list(data['SKU'].unique())
     prepared_products = []
