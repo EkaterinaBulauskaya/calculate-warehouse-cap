@@ -78,7 +78,11 @@ def calculate_stocks(predictions, dates, sku_list, inventory_filename):
         axis=1,
     ).transpose().reset_index(drop=True)
     stocks.columns = dates[1:]
-    stocks[dates[0]] = pd.read_csv(inventory_filename)[dates[0]]
+    inventory_data = pd.read_csv(inventory_filename)
+    sku_order = [list(inventory_data['SKU']).index(sku) if sku in list(inventory_data['SKU']) else None for sku in sku_list]
+    if None in sku_order:
+        raise ValueError(f'Some SKU not in inventory file {inventory_filename} (unknown SKU): {sku_list[sku_order.index(None)]!r}')
+    stocks[dates[0]] = list(inventory_data.loc[sku_order, dates[0]])
     stocks['SKU'] = sku_list
 
     for i in range(1, len(dates)):
