@@ -95,6 +95,8 @@ def get_xyz_analysis(products):
 
 def merge_analysis_result(margin_table, stability_table, sku_list):
     '''Объединяет результаты ABC- и XYZ-анализа в одну таблицу'''
+    if margin_table['SKU'].duplicated().any():
+        raise ValueError('duplicate SKU in margin table')
     result_matrix = pd.DataFrame()
     result_matrix['SKU'] = sku_list
     result_matrix['Margin'] = [list(margin_table[margin_table['SKU'] == sku]['Margin'])[0] for sku in sku_list]
