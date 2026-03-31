@@ -1,5 +1,7 @@
 # Example of warehouse optimization
 
+[![CI (warehouse_cap)](https://github.com/EkaterinaBulauskaya/warehouse-optimization/actions/workflows/warehouse-cap-ci.yml/badge.svg)](https://github.com/EkaterinaBulauskaya/warehouse-optimization/actions/workflows/warehouse-cap-ci.yml)
+
 Репозиторий с двумя независимыми Python-проектами (данные и скрипты лежат в своих папках).
 
 | Проект | Описание | Документация |
