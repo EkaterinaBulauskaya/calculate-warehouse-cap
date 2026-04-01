@@ -57,15 +57,21 @@ def get_abc_analysis(products):
     margin_table = pd.DataFrame()
     margin_table['SKU'] = [products[i].loc[0, 'SKU'] for i in range(len(products))]
     margin_table['Margin'] = [round(((products[i]['Price'] - products[i]['Cost']) * products[i]['Sold']).sum(), 2) for i in range(len(products))]
-    margin_table['Share'] = round(margin_table['Margin'] / total_margin * 100, 2)
-    margin_table = margin_table.sort_values(by = 'Share', ascending = False).reset_index(drop = True)
-    margin_table['Margin_cum'] = margin_table['Margin'].cumsum()
-    margin_table['Category'] = '-'
-    margin_table.loc[margin_table['Margin_cum'] < total_margin * 0.95, 'Category'] = 'B'
-    margin_table.loc[margin_table['Margin_cum'] < total_margin * 0.8, 'Category'] = 'A'
-    margin_table.loc[margin_table['Share'] < 3, 'Category'] = 'B'
-    margin_table.loc[margin_table['Margin_cum'] >= total_margin * 0.95, 'Category'] = 'C'
-    margin_table.loc[margin_table['Share'] <= 0, 'Category'] = 'D'
+    if total_margin == 0:
+        # raise ValueError(f'Total margin of all products is {total_margin!r}')
+        margin_table['Share'] = 0
+        margin_table['Margin_cum'] = margin_table['Margin'].cumsum()
+        margin_table['Category'] = 'D'
+    else:
+        margin_table['Share'] = round(margin_table['Margin'] / total_margin * 100, 2)
+        margin_table = margin_table.sort_values(by = 'Share', ascending = False).reset_index(drop = True)
+        margin_table['Margin_cum'] = margin_table['Margin'].cumsum()
+        margin_table['Category'] = '-'
+        margin_table.loc[margin_table['Margin_cum'] < total_margin * 0.95, 'Category'] = 'B'
+        margin_table.loc[margin_table['Margin_cum'] < total_margin * 0.8, 'Category'] = 'A'
+        margin_table.loc[margin_table['Share'] < 3, 'Category'] = 'B'
+        margin_table.loc[margin_table['Margin_cum'] >= total_margin * 0.95, 'Category'] = 'C'
+        margin_table.loc[margin_table['Share'] <= 0, 'Category'] = 'D'
     return margin_table
 
 
@@ -85,13 +91,18 @@ def get_xyz_analysis(products):
     stability_table = pd.DataFrame()
     stability_table['SKU'] = [products_months[i].loc[0, 'SKU'] for i in range(len(products_months))]
     stability_table['Avg_sold'] = [round(products_months[i]['Sold'].sum() / len(products_months[i]), 2) for i in range(len(products_months))]
-    stability_table['St_deviation'] = [(((products_months[i]['Sold'] - stability_table.loc[i, 'Avg_sold'])**2).sum() / len(products_months[i]))**(1/2) for i in range(len(products_months))]
-    stability_table['Coeff_variation'] = stability_table['St_deviation'] / stability_table['Avg_sold'] * 100
     stability_table['Category'] = 'W'
-    stability_table.loc[stability_table['Coeff_variation'] > 0, 'Category'] = 'X'
-    stability_table.loc[stability_table['Coeff_variation'] > 25, 'Category'] = 'Y'
-    stability_table.loc[stability_table['Coeff_variation'] > 50, 'Category'] = 'Z'
-    stability_table.loc[stability_table['Coeff_variation'] > 100, 'Category'] = 'W'
+    if len(stability_table.loc[stability_table['Avg_sold'] == 0, :]) > 0:
+        # raise ValueError(f'Product average sold is 0. SKU: {stability_table.loc[stability_table['Avg_sold'] == 0, 'SKU']}')
+        stability_table['St_deviation'] = [(((products_months[i]['Sold'] - stability_table.loc[i, 'Avg_sold'])**2).sum() / len(products_months[i]))**(1/2) for i in range(len(products_months))]
+        stability_table['Coeff_variation'] = 0
+    else:
+        stability_table['St_deviation'] = [(((products_months[i]['Sold'] - stability_table.loc[i, 'Avg_sold'])**2).sum() / len(products_months[i]))**(1/2) for i in range(len(products_months))]
+        stability_table['Coeff_variation'] = stability_table['St_deviation'] / stability_table['Avg_sold'] * 100
+        stability_table.loc[stability_table['Coeff_variation'] > 0, 'Category'] = 'X'
+        stability_table.loc[stability_table['Coeff_variation'] > 25, 'Category'] = 'Y'
+        stability_table.loc[stability_table['Coeff_variation'] > 50, 'Category'] = 'Z'
+        stability_table.loc[stability_table['Coeff_variation'] > 100, 'Category'] = 'W'
     return stability_table
 
 
