@@ -12,6 +12,9 @@ def repair_product(product, sells_col = 'Sold'):
     new_product = product.copy()
     mask_known = product['Status'] == 1
     mask_missing = product['Status'] == 0
+    if len(product.loc[mask_known, :]) == 0:
+        return product
+
     model = LinearRegression()
     model.fit(product.loc[mask_known, ['Date_ordinal']], product.loc[mask_known, sells_col])
     repair_ordinals  = product.loc[mask_missing, 'Date_ordinal']
