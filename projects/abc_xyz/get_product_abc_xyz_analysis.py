@@ -78,14 +78,14 @@ def get_abc_analysis(products):
 def get_xyz_analysis(products):
     '''Проводит XYZ-анализ продуктов (по стабильности спроса)'''
     for i in range(len(products)):
-        products[i]['Day'] = [day[:7] for day in products[i]['Day'].astype('str')]
+        products[i]['Month'] = [day[:7] for day in products[i]['Day'].astype('str')]
 
     products_months = []
     for i in range(len(products)):
         product = pd.DataFrame()
-        product['Month'] = products[i]['Day'].unique()
+        product['Month'] = products[i]['Month'].unique()
         product['SKU'] = products[i].loc[0, 'SKU']
-        product['Sold'] = [products[i].loc[products[i]['Day'] == month, 'Sold'].sum() for month in product['Month']]
+        product['Sold'] = [products[i].loc[products[i]['Month'] == month, 'Sold'].sum() for month in product['Month']]
         products_months.append(product)
 
     stability_table = pd.DataFrame()
