@@ -1,4 +1,4 @@
-name: CI (warehouse_cap)
+name: CI (tests)
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.14"
 
       - name: Install dependencies
         run: |
@@ -23,6 +23,6 @@ jobs:
           python -m pip install -r requirements-dev.txt
           python -m pip install pandas scikit-learn
 
-      - name: Run tests (warehouse_cap)
+      - name: Run tests
         run: |
-          python -m pytest projects/warehouse_cap/tests -v
+          python -m pytest -v
