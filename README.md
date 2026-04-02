@@ -11,10 +11,16 @@
 
 ## Общие зависимости
 
-Оба проекта используют `pandas` и `scikit-learn`:
+Оба проекта используют `pandas` и `scikit-learn`. Минимально для запуска скриптов:
 
 ```bash
 python -m pip install pandas scikit-learn
+```
+
+Для запуска **тестов** из корня репозитория удобнее одна команда — в [`requirements-dev.txt`](requirements-dev.txt) перечислены `pytest`, `pandas` и `scikit-learn`:
+
+```bash
+python -m pip install -r requirements-dev.txt
 ```
 
 ## Структура репозитория
@@ -29,10 +35,9 @@ projects/
 
 ## Тесты
 
-В корне репозитория заданы [`pytest.ini`](pytest.ini) (в т.ч. `pythonpath`) и [`requirements-dev.txt`](requirements-dev.txt) с `pytest`. Запуск **всех** тестов обоих проектов:
+В корне репозитория заданы [`pytest.ini`](pytest.ini) (в т.ч. `pythonpath`) и [`requirements-dev.txt`](requirements-dev.txt). Установите зависимости для тестов ([Общие зависимости](#общие-зависимости)), затем из **корня** репозитория — запуск **всех** тестов:
 
 ```bash
-python -m pip install -r requirements-dev.txt
 python -m pytest -v
 ```
 
